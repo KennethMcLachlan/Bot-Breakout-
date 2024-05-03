@@ -13,20 +13,29 @@ public class EnemyAI : MonoBehaviour
         Death
     }
 
-    [SerializeField] private List<Transform> _waypoints;
+    private List<Transform> _waypoints;
     [SerializeField] private AIState _currentState;
 
     private NavMeshAgent _agent;
     private int _currentPoint = 0;
     private bool _inReverse;
 
+    //Enemy Health
+    private int _maxHealth;
+    private int _MaxHealth = 1;
+
     private void Start()
     {
+        _maxHealth = 1;
+        _waypoints = SpawnManager.Instance.SendWaypoints();
+
         _agent = GetComponent<NavMeshAgent>();
         if (_agent != null)
         {
             _agent.destination = _waypoints[_currentPoint].position;
         }
+
+        
     }
 
     private void Update()
@@ -75,5 +84,26 @@ public class EnemyAI : MonoBehaviour
         {
             _currentPoint--;
         }
+    }
+
+    public void WaypointReceiver()
+    {
+        SpawnManager.Instance.SendWaypoints();
+    }
+
+    //public void Damage(int health)
+    //{
+    //    _maxHealth -= health;
+    //    if (health <= 0)
+    //    {
+    //        Destroy(this.gameObject);
+    //    }
+    //}
+
+    public void Damage()
+    {
+        this.gameObject.SetActive(false);
+        this.gameObject.transform.position = SpawnManager.Instance._spawnPoint.position;
+        //Destroy(gameObject);
     }
 }
