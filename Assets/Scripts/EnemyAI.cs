@@ -24,8 +24,11 @@ public class EnemyAI : MonoBehaviour
     private int _maxHealth;
     private int _MaxHealth = 1;
 
+    private int _points;
+
     private void Start()
     {
+        _points = 0;
         _maxHealth = 1;
         _waypoints = SpawnManager.Instance.SendWaypoints();
 
@@ -91,19 +94,19 @@ public class EnemyAI : MonoBehaviour
         SpawnManager.Instance.SendWaypoints();
     }
 
-    //public void Damage(int health)
-    //{
-    //    _maxHealth -= health;
-    //    if (health <= 0)
-    //    {
-    //        Destroy(this.gameObject);
-    //    }
-    //}
 
     public void Damage()
     {
+        EnemyDeathPoint();
         this.gameObject.SetActive(false);
         this.gameObject.transform.position = SpawnManager.Instance._spawnPoint.position;
-        //Destroy(gameObject);
+    }
+
+    public void EnemyDeathPoint()
+    {
+        //_points = points += 100;
+        _points += 100;
+        
+        UIManager.Instance.UpdateScore(_points);
     }
 }

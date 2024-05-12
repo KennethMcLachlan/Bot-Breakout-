@@ -5,11 +5,19 @@ using UnityEngine;
 public class FinishingWall : MonoBehaviour
 {
     [SerializeField] private GameObject _wall;
-    [SerializeField] private int _health = 10;
-
+    [SerializeField] private int _wallHealth = 10;
+    public EnemyAI _enemyAI;
+    private void Start()
+    {
+        _enemyAI = GetComponent<EnemyAI>();
+        if(_enemyAI == null)
+        {
+            Debug.Log("Enemy AI is NULL!");
+        }
+    }
     private void Update()
     {
-        if (_health <= 0)
+        if (_wallHealth <= 0)
         {
             //Initiate Game Over Sequence
         }
@@ -18,7 +26,10 @@ public class FinishingWall : MonoBehaviour
     {
         if (other.tag == "Enemy")
         {
-            _health--;
+            _wallHealth--;
+
+            _enemyAI.Damage(); //Destroy enemy when they hit the finishing wall
+
         }
     }
 }

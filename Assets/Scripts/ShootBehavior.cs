@@ -1,33 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ShootBehavior : MonoBehaviour
 {
     public int damage = 1;
     public float range = 100f;
 
+    
+    public Ray _raycastOrigin;
+    public RaycastHit _hit;
+
     public LayerMask _hitLayer;
-    [SerializeField] private GameObject _enemyForDebugging;
-    [SerializeField] private Camera _mainCamera;
     private void Start()
     {
-        _mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        _raycastOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
     }
     private void Update()
     {
-        if (_mainCamera == null)
+        
+        if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            Debug.Log("Main Camera is NULL!");
-        }
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            Ray rayOrigin = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hitInfo;
 
-            if (Physics.Raycast(rayOrigin, out hitInfo, Mathf.Infinity, _hitLayer))
+            if (Physics.Raycast(rayOrigin, out hitInfo, Mathf.Infinity/*, _hitLayer*/))
             {
-                Debug.DrawLine(rayOrigin.origin, hitInfo.point);
                 Debug.Log("Hit" + hitInfo.collider.gameObject.name);
 
                 EnemyAI enemy = hitInfo.transform.GetComponent<EnemyAI>();
@@ -35,26 +34,16 @@ public class ShootBehavior : MonoBehaviour
                 {
                     Debug.Log("Enemy Hit");
                     enemy.Damage();
-
-                    //Instantiate(_enemyForDebugging, hitInfo.point, Quaternion.identity);
-
-                    //if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-                    //{
-                    //    Debug.Log("Hit Enemy");
-                    //}
                 }
-
-                //Shoot();
             }
         }
     }
 
-    //void Shoot()
-    //{
-    //    RaycastHit hitInfo;
-    //    if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hitInfo, range))
-    //    {
-    //        Debug.Log("Hit: " + hitInfo.transform.name);
-    //    }
-    //}
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Vector3 direction = transform.TransformDirection(Vector3.forward) * Mathf.Infinity;
+        Gizmos.DrawRay(_raycastOrigin);
+    }
+
 }

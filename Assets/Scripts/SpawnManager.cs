@@ -33,9 +33,6 @@ public class SpawnManager : MonoBehaviour
 
     private bool _roundOver;
 
-    //[SerializeField] private int _waveCount;
-
-
     private void Awake()
     {
         _instance = this;
@@ -71,7 +68,6 @@ public class SpawnManager : MonoBehaviour
             for (int enemyCount = _spawnCount; enemyCount > 0; enemyCount--)
             {
                 RequestEnemy();
-                
 
                 yield return new WaitForSeconds(4f);
 
@@ -86,11 +82,6 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    //private void InstantiateEnemy()
-    //{
-    //    Instantiate(_enemyPrefab, _spawnPoint.position, Quaternion.identity);
-    //    _spawnCount++;
-    //}
 
     private List<GameObject> GenerateEnemies(int amountOfEnemies)
     {
@@ -129,8 +120,9 @@ public class SpawnManager : MonoBehaviour
         return _waypoints;
     }
 
-    private void RoundReset()
+    private void RoundReset() //Currently inactive
     {
+        
         if (_enemiesCanSpawn == false)
         {
             _spawnCount = _spawnCount + 10;
