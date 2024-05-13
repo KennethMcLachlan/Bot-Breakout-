@@ -20073,8 +20073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _wall: {fileID: 0}
-  _wallHealth: 10
-  _enemyAI: {fileID: 0}
+  _wallHealth: 100
 --- !u!65 &788139037
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20094,8 +20093,35 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1119111, y: 2.1738658, z: 1.65935}
-  m_Center: {x: -0.000000037252903, y: 1.0628896, z: 0}
+  m_Size: {x: 0.35942927, y: 2.1738658, z: 1.65935}
+  m_Center: {x: 0.12375909, y: 1.0628896, z: -8.397368e-15}
+--- !u!54 &788139041
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788139032}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &790876530
 GameObject:
   m_ObjectHideFlags: 0
@@ -32864,6 +32890,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 6856010045954352397, guid: de0cd04ea17219b489614ca4615c51ea,
     type: 3}
+  _heavyEnemyPrefab: {fileID: 6210137136204726746, guid: 6fb30d6b3a3135049921848cfa7b68d2,
+    type: 3}
   _spawnPoint: {fileID: 1546424784}
   _waypoints:
   - {fileID: 1546424784}
@@ -40736,6 +40764,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _score: {fileID: 641322860}
+  _wallHeath: {fileID: 1693442085}
 --- !u!1001 &1501140990
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45810,9 +45839,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
-  m_Value: 1
+  m_MaxValue: 100
+  m_WholeNumbers: 1
+  m_Value: 100
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -54449,6 +54478,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 788139037}
+    - targetCorrespondingSourceObject: {fileID: -927199367670048503, guid: 9676355e721cc4c12911f4cb66872093,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 788139041}
   m_SourcePrefab: {fileID: 100100000, guid: 9676355e721cc4c12911f4cb66872093, type: 3}
 --- !u!1001 &1974404419
 PrefabInstance:

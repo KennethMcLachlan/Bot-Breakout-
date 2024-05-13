@@ -31,6 +31,13 @@ public class NewShootBehavior : MonoBehaviour
                 }
 
                 Debug.Log("Hit: " + _hitInfo.transform.name);
+
+                HeavyEnemyAI heavyEnemy = _hitInfo.transform.GetComponent<HeavyEnemyAI>();
+                if (heavyEnemy != null)
+                {
+                    heavyEnemy.Damage();
+                    Debug.Log("Heavy Enemy took a hit");
+                }
             }
         }
     }

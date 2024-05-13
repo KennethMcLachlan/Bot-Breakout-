@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class UIManager : MonoBehaviour
     }
 
     [SerializeField] private TMP_Text _score;
+    [SerializeField] private Slider _wallHeath;
 
     private void Awake()
     {
@@ -32,5 +34,10 @@ public class UIManager : MonoBehaviour
     {
         //Make a switch statement to update the score depending on which enemy was defeated
         _score.text = playerScore.ToString();
+    }
+
+    public void UpdateWallHealth(int health)
+    {
+        _wallHeath.value = health;
     }
 }

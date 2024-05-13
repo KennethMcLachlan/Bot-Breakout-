@@ -19,6 +19,7 @@ public class SpawnManager : MonoBehaviour
     }
 
     [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _heavyEnemyPrefab;
     [SerializeField] public Transform _spawnPoint;
 
     //Lists
@@ -64,7 +65,7 @@ public class SpawnManager : MonoBehaviour
 
         while (_enemiesCanSpawn == true)
         {
-
+            
             for (int enemyCount = _spawnCount; enemyCount > 0; enemyCount--)
             {
                 RequestEnemy();
@@ -113,7 +114,43 @@ public class SpawnManager : MonoBehaviour
         _enemyPool.Add(newEnemy);
 
         return newEnemy;
+
     }
+
+    public GameObject RequestHeavyEnemy()
+    {
+        foreach (var heavyEnemy in _enemyPool)
+        {
+            if (heavyEnemy.activeInHierarchy == false)
+            {
+                heavyEnemy.SetActive(false);
+                _spawnCount++;
+                return heavyEnemy;
+            }
+
+        }
+
+        GameObject newHeavyEnemy = Instantiate(_heavyEnemyPrefab, _spawnPoint.position, Quaternion.identity);
+        newHeavyEnemy.transform.parent = _enemyContainer.transform;
+        _enemyPool.Add(newHeavyEnemy);
+
+        return newHeavyEnemy;
+    }
+
+    //private void SpawnEnemyType()
+    //{
+    //    //Random Enemy Type to Spawn
+    //    //int typeOfEnemyToSpawn = Random.Range(0, 5);
+
+    //    //if (typeOfEnemyToSpawn <= 4)
+    //    //{
+    //    //    RequestEnemy();
+    //    //}
+    //    //else
+    //    //{
+    //    //    RequestHeavyEnemy();
+    //    //}
+    //}
 
     public List<Transform> SendWaypoints()
     {
