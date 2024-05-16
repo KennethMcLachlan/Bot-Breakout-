@@ -21,7 +21,11 @@ public class UIManager : MonoBehaviour
     }
 
     [SerializeField] private TMP_Text _score;
+    [SerializeField] private TMP_Text _enemyTotal;
     [SerializeField] private Slider _wallHeath;
+
+    //Game Over Sequence
+    [SerializeField] private GameObject _gameOverUI;
 
     private void Awake()
     {
@@ -36,8 +40,18 @@ public class UIManager : MonoBehaviour
         _score.text = playerScore.ToString();
     }
 
+    public void UpdateEnemyCount(int enemyCount)
+    {
+        _enemyTotal.text = enemyCount.ToString();
+    }
+
     public void UpdateWallHealth(int health)
     {
         _wallHeath.value = health;
+    }
+
+    public void GameOverSequence()
+    {
+        _gameOverUI.SetActive(true);
     }
 }

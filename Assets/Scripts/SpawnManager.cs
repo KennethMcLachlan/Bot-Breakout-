@@ -117,25 +117,25 @@ public class SpawnManager : MonoBehaviour
 
     }
 
-    public GameObject RequestHeavyEnemy()
-    {
-        foreach (var heavyEnemy in _enemyPool)
-        {
-            if (heavyEnemy.activeInHierarchy == false)
-            {
-                heavyEnemy.SetActive(false);
-                _spawnCount++;
-                return heavyEnemy;
-            }
+    //public GameObject RequestHeavyEnemy()
+    //{
+    //    foreach (var heavyEnemy in _enemyPool)
+    //    {
+    //        if (heavyEnemy.activeInHierarchy == false)
+    //        {
+    //            heavyEnemy.SetActive(false);
+    //            _spawnCount++;
+    //            return heavyEnemy;
+    //        }
 
-        }
+    //    }
 
-        GameObject newHeavyEnemy = Instantiate(_heavyEnemyPrefab, _spawnPoint.position, Quaternion.identity);
-        newHeavyEnemy.transform.parent = _enemyContainer.transform;
-        _enemyPool.Add(newHeavyEnemy);
+    //    GameObject newHeavyEnemy = Instantiate(_heavyEnemyPrefab, _spawnPoint.position, Quaternion.identity);
+    //    newHeavyEnemy.transform.parent = _enemyContainer.transform;
+    //    _enemyPool.Add(newHeavyEnemy);
 
-        return newHeavyEnemy;
-    }
+    //    return newHeavyEnemy;
+    //}
 
     //private void SpawnEnemyType()
     //{

@@ -23,6 +23,7 @@ public class EnemyAI : MonoBehaviour
     //Heavy Enemy Health
 
     private int _points;
+    private int _enemyPoints;
 
     private void Start()
     {
@@ -92,6 +93,7 @@ public class EnemyAI : MonoBehaviour
     public void Damage()
     {
         SendPoints(100);
+        SendEnemyCount(1);
         EnemyReposition();
     }
 
@@ -111,5 +113,11 @@ public class EnemyAI : MonoBehaviour
         _points += points;
         
         UIManager.Instance.UpdateScore(_points);
+    }
+
+    public void SendEnemyCount(int points)
+    {
+        _enemyPoints += points;
+        UIManager.Instance.UpdateEnemyCount(_enemyPoints);
     }
 }

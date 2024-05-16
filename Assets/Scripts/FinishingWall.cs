@@ -18,6 +18,8 @@ public class FinishingWall : MonoBehaviour
     {
         if (_wallHealth <= 0)
         {
+            Time.timeScale = 0;
+            UIManager.Instance.GameOverSequence();
             //Initiate Game Over Sequence
         }
     }
