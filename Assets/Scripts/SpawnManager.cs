@@ -28,7 +28,8 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] private GameObject _enemyContainer;
 
-    private int _spawnCount = 10;
+    [SerializeField] private int _spawnCount;
+    [SerializeField] private int _spawnMultiplier;
 
     private bool _enemiesCanSpawn;
 
@@ -41,7 +42,7 @@ public class SpawnManager : MonoBehaviour
 
     private void Start()
     {
-        _spawnCount = 10;
+        //_spawnCount = 10;
         GenerateEnemies(1);
         _enemiesCanSpawn = true;
     }
@@ -75,11 +76,16 @@ public class SpawnManager : MonoBehaviour
                 if (enemyCount <= 0)
                 {
                     //End Round
+                    Debug.Log("Enemy Count = 0");
                     break;
                 }
             }
 
             _enemiesCanSpawn = false;
+            //RoundReset();
+            StartCoroutine(WaveSetRoutine());
+            Debug.Log("Start Wave Set Routine");
+
         }
     }
 
@@ -157,22 +163,28 @@ public class SpawnManager : MonoBehaviour
         return _waypoints;
     }
 
-    private void RoundReset() //Currently inactive
-    {
+    //private void RoundReset() //Currently inactive
+    //{
         
-        if (_enemiesCanSpawn == false)
-        {
-            _spawnCount = _spawnCount + 10;
-            StartCoroutine(WaveSetRoutine());
-            //Start Wave Build Up Coroutine
-        }
-    }
+    //    if (_enemiesCanSpawn == false)
+    //    {
+    //        _roundOver = true;
+    //        _spawnCount = _spawnCount * _spawnMultiplier;
+    //        StartCoroutine(WaveSetRoutine());
+    //        //Start Wave Build Up Coroutine
+    //    }
+    //}
 
     IEnumerator WaveSetRoutine()
     {
         //UI and timing to explain the incoming round
         //Get ready Go!
         yield return new WaitForSeconds(8f);
+        _spawnCount = _spawnCount + _spawnMultiplier;
+        //Increase the speed of the Enemy
+        //_roundOver = false;
         _enemiesCanSpawn = true;
+        BeginSpawning();
+        Debug.Log("WaveSetRoutine Complete");
     }
 }
