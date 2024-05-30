@@ -8,6 +8,8 @@ public class ShootBehavior : MonoBehaviour
     public int damage = 1;
     public float range = 100f;
 
+    [SerializeField] AudioSource _gunShotSFX;
+
     
     public Ray _raycastOrigin;
     public RaycastHit _hit;
@@ -16,12 +18,18 @@ public class ShootBehavior : MonoBehaviour
     private void Start()
     {
         _raycastOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        _gunShotSFX.GetComponent<AudioSource>();
+        if (_gunShotSFX == null)
+        {
+            Debug.Log(" Gun Shot audio is null");
+        }
     }
     private void Update()
     {
         
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
+            _gunShotSFX.Play();
             Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hitInfo;
 

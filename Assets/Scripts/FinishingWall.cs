@@ -5,14 +5,20 @@ using UnityEngine.UI;
 
 public class FinishingWall : MonoBehaviour
 {
-    [SerializeField] private GameObject _wall;
+    //[SerializeField] private GameObject _wall;
     [SerializeField] private int _wallHealth;
-    //public EnemyAI _enemyAI;
 
-    //[SerializeField] private Slider _healthbar;
+    [SerializeField] private ParticleSystem _explosionAnim;
+
+    [SerializeField] private AudioSource _explosionSFX;
+
     private void Start()
     {
-        //_wallHealth = 100;
+        _explosionSFX = GetComponent<AudioSource>();
+        if (_explosionSFX == null)
+        {
+            Debug.Log("ExplosionAudio is NULL");
+        }
     }
     private void Update()
     {
@@ -27,11 +33,12 @@ public class FinishingWall : MonoBehaviour
     {
         if (other.tag == "Enemy")
         {
-
             EnemyAI enemyAI = other.GetComponent<EnemyAI>();
             enemyAI.SelfDestruct(); //Destroy enemy when they hit the finishing wall
             Debug.Log("Enemy has collided with the wall");
 
+            _explosionAnim.Play();
+            _explosionSFX.Play();
             _wallHealth -= 10;
             UIManager.Instance.UpdateWallHealth(_wallHealth);
         }

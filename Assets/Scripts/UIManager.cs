@@ -37,11 +37,13 @@ public class UIManager : MonoBehaviour
     public void UpdateScore(int playerScore)
     {
         //Make a switch statement to update the score depending on which enemy was defeated
+        Debug.Log("Updating Score: " + playerScore);
         _score.text = playerScore.ToString();
     }
 
     public void UpdateEnemyCount(int enemyCount)
     {
+        Debug.Log("Updating Enemy Count: " + enemyCount);
         _enemyTotal.text = enemyCount.ToString();
     }
 
