@@ -36,9 +36,20 @@ public class EnemyAI : MonoBehaviour
     private float _hideTimer = 0f;
     [SerializeField] private float _hideDuration = 3f;
 
+    //AI State Bool Set
+    private bool _isWalking;
+    private bool _isRunning;
+    private bool _isHiding;
+    private bool _isDead;
+
     private void Start()
     {
         _wayPoints = SpawnManager.Instance.SendWaypoints();
+        if (_wayPoints == null || _wayPoints.Count == 0)
+        {
+            Debug.LogError("Waypoints are not set or empty");
+            return;
+        }
 
         _agent = GetComponent<NavMeshAgent>();
         if (_agent != null)
@@ -77,7 +88,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        
+
         //Determine Current AI Behavior
         switch (_currentState)
         {
@@ -87,21 +98,28 @@ public class EnemyAI : MonoBehaviour
                 _animator.SetBool("Hiding", false);
                 _animator.SetFloat("Speed", 4.9f);
                 _agent.speed = 4.9f;
-                CalculateMovement();
+
+                //CalculateMovement();
                 break;
+
             case AIState.Running:
                 Debug.Log("Enemy is Running");
                 _animator.SetBool("Hiding", false);
                 _animator.SetFloat("Speed", 10f);
                 _agent.speed = 10;
-                CalculateMovement();
+
+                //CalculateMovement();
                 break;
+
             case AIState.Hiding:
                 Debug.Log("Enemy is Hiding");
                 _animator.SetBool("Hiding", true);
+                _animator.SetFloat("Speed", 0f);
                 _agent.speed = 0;
-                CalculateMovement();
+
+                //CalculateMovement();
                 break;
+
             case AIState.Death:
                 Debug.Log("Enemy is Playing Death Anim");
                 _animator.SetBool("Hiding", false);
@@ -122,62 +140,45 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void CalculateMovement()
-    {
-        if (_agent.remainingDistance < 0.5f)
-        {
-            RandomizeAIState();
-
-            _currentPoint = (_currentPoint + 1) % _wayPoints.Count;
-            _agent.SetDestination(_wayPoints[_currentPoint].position);
-        }
-
+    //private void CalculateMovement()
+    //{
     //    if (_agent.remainingDistance < 0.5f)
     //    {
+    //        RandomizeAIState();
 
-    //        if (_inReverse == true)
-    //        {
-    //            Reverse();
-    //        }
-    //        else
-    //        {
-    //            Forward();
-    //        }
-
+    //        _currentPoint = (_currentPoint + 1) % _wayPoints.Count;
     //        _agent.SetDestination(_wayPoints[_currentPoint].position);
     //    }
+
+    //}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Waypoint"))
+        {
+            Debug.Log("Waypoint Trigger has been hit!");
+            _currentPoint = (_currentPoint + 1) % _wayPoints.Count;
+            _agent.SetDestination(_wayPoints[_currentPoint].position);
+            RandomizeAIState();
+        }
     }
-    //private void Forward()
-    //{
-    //    if (_currentPoint == _wayPoints.Count - 1)
-    //    {
-    //        _inReverse = true;
-    //        _currentPoint--;
-    //    }
-    //    else
-    //    {
-    //        _currentPoint++;
-    //    }
-    //}
-
-    //private void Reverse()
-    //{
-    //    if (_currentPoint == 0)
-    //    {
-    //        _inReverse = false;
-    //        _currentPoint++;
-    //    }
-    //    else
-    //    {
-    //        _currentPoint--;
-    //    }
-    //}
-
     private void RandomizeAIState()
     {
-        _currentState = (AIState)Random.Range(0, System.Enum.GetValues(typeof(AIState)).Length - 1);
-        Debug.Log($"Waypoint {_currentPoint}: Changing state to {_currentState}");
+        AIState[] availableStates = { AIState.Walking, AIState.Running, AIState.Hiding };
+        _currentState = availableStates[Random.Range(0, availableStates.Length)];
+        _agent.SetDestination(_wayPoints[_currentPoint].position);
     }
+
+    //public void ResetAI()
+    //{
+    //    _currentState = AIState.Walking;
+    //    _currentPoint = 0;
+    //    _agent.SetDestination(_wayPoints[_currentPoint].position);
+    //    _animator.SetBool("Hiding", false);
+    //    _animator.SetFloat("Speed", 4.9f);
+    //    _agent.speed = 4.9f;
+    //    _botMeshRenderer.enabled = true;
+    //}
     public void WaypointReceiver()
     {
         SpawnManager.Instance.SendWaypoints();
@@ -202,9 +203,9 @@ public class EnemyAI : MonoBehaviour
 
     private IEnumerator BotDeathSequence()
     {
-        yield return new WaitForSeconds(1f);
+        //yield return new WaitForSeconds(2.25f);
+        yield return new WaitForSeconds(3f);
         _botDeathSFX.Play();
-        yield return new WaitForSeconds(1f);
         _botExplosion.Play();
         yield return new WaitForSeconds(1f);
 
@@ -222,7 +223,9 @@ public class EnemyAI : MonoBehaviour
     {
         this.gameObject.SetActive(false);
         this.gameObject.transform.position = SpawnManager.Instance._spawnPoint.position;
-        _botMeshRenderer.enabled = true;
+        //ResetAI();
+        this.gameObject.SetActive(true);
+        //_botMeshRenderer.enabled = true;
     }
 
     public void SendPoints(int points)

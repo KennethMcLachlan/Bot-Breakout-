@@ -89,6 +89,39 @@ public class SpawnManager : MonoBehaviour
         return _enemyPool;
     }
 
+    //public GameObject RequestEnemy()
+    //{
+    //    foreach (var enemy in _enemyPool)
+    //    {
+    //        if (enemy.activeInHierarchy == false)
+    //        {
+    //            InitializeEnemy(enemy);
+    //            return enemy;
+    //        }
+    //    }
+
+    //    GameObject newEnemy = Instantiate(_enemyPrefab, _spawnPoint.position, Quaternion.identity);
+    //    InitializeEnemy(newEnemy);
+    //    _enemyPool.Add(newEnemy);
+    //    return newEnemy;
+    //}
+
+    //private void InitializeEnemy(GameObject enemy)
+    //{
+    //    enemy.transform.position = _spawnPoint.position;
+    //    enemy.transform.rotation = Quaternion.identity;
+    //    enemy.SetActive(true);
+    //    EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
+    //    if (enemyAI != null)
+    //    {
+    //        enemyAI.ResetAI();
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("EnemyAI component not found");
+    //    }
+    //}
+
     public GameObject RequestEnemy()
     {
         foreach (var enemy in _enemyPool)
@@ -98,50 +131,18 @@ public class SpawnManager : MonoBehaviour
                 enemy.transform.position = _spawnPoint.position;
                 enemy.transform.rotation = Quaternion.identity;
                 enemy.SetActive(true);
+                //enemy.GetComponent<EnemyAI>().ResetAI();
                 return enemy;
             }
         }
 
         GameObject newEnemy = Instantiate(_enemyPrefab, _spawnPoint.position, Quaternion.identity);
         newEnemy.transform.parent = _enemyContainer.transform;
+        newEnemy.SetActive(true);
+        //newEnemy.GetComponent<EnemyAI>().ResetAI();
         _enemyPool.Add(newEnemy);
         return newEnemy;
     }
-
-    //public GameObject RequestHeavyEnemy()
-    //{
-    //    foreach (var heavyEnemy in _enemyPool)
-    //    {
-    //        if (heavyEnemy.activeInHierarchy == false)
-    //        {
-    //            heavyEnemy.SetActive(false);
-    //            _spawnCount++;
-    //            return heavyEnemy;
-    //        }
-
-    //    }
-
-    //    GameObject newHeavyEnemy = Instantiate(_heavyEnemyPrefab, _spawnPoint.position, Quaternion.identity);
-    //    newHeavyEnemy.transform.parent = _enemyContainer.transform;
-    //    _enemyPool.Add(newHeavyEnemy);
-
-    //    return newHeavyEnemy;
-    //}
-
-    //private void SpawnEnemyType()
-    //{
-    //    //Random Enemy Type to Spawn
-    //    //int typeOfEnemyToSpawn = Random.Range(0, 5);
-
-    //    //if (typeOfEnemyToSpawn <= 4)
-    //    //{
-    //    //    RequestEnemy();
-    //    //}
-    //    //else
-    //    //{
-    //    //    RequestHeavyEnemy();
-    //    //}
-    //}
 
     public List<Transform> SendWaypoints()
     {
