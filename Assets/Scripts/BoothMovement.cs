@@ -5,18 +5,47 @@ using UnityEngine;
 public class BoothMovement : MonoBehaviour
 {
     [SerializeField] private float _speed;
+    [SerializeField] private AudioSource _sfx;
+
+    private bool _isMovingUp;
+    private bool _isMovingDown;
+
+    private void Start()
+    {
+        _sfx = GetComponent<AudioSource>();
+    }
     void Update()
     {
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            MoveUp();
-            //Add SFX
+            _isMovingUp = true;
+            _sfx.Play();
+        }
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            _isMovingUp = false;
+            _sfx.Stop();
         }
 
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            _isMovingDown = true;
+            _sfx.Play();
+        }
+        if (Input.GetKeyUp(KeyCode.Q))
+        {
+            _isMovingDown = false;
+            _sfx.Stop();
+        }
+
+        if (_isMovingUp == true)
+        {
+            MoveUp();
+        }
+
+        if (_isMovingDown == true)
         {
             MoveDown();
-            //Add SFX
         }
     }
 

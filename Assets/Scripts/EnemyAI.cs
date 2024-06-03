@@ -34,13 +34,10 @@ public class EnemyAI : MonoBehaviour
 
     //Enemy Hiding Timer
     private float _hideTimer = 0f;
-    [SerializeField] private float _hideDuration = 3f;
+    [SerializeField] private float _hideDuration;
+    [SerializeField] private float _minHideDuration = 3f;
+    [SerializeField] private float _maxHideDuration = 5f;
 
-    //AI State Bool Set
-    private bool _isWalking;
-    private bool _isRunning;
-    private bool _isHiding;
-    private bool _isDead;
 
     private void Start()
     {
@@ -117,6 +114,11 @@ public class EnemyAI : MonoBehaviour
                 _animator.SetFloat("Speed", 0f);
                 _agent.speed = 0;
 
+                if (_hideTimer <= 0f)
+                {
+                    _hideDuration = Random.Range(_minHideDuration, _maxHideDuration);
+                }
+
                 //CalculateMovement();
                 break;
 
@@ -135,7 +137,7 @@ public class EnemyAI : MonoBehaviour
             if (_hideTimer >= _hideDuration)
             {
                 RandomizeAIState();
-                _hideTimer = 0;
+                _hideTimer = 0f;
             }
         }
     }
@@ -222,10 +224,17 @@ public class EnemyAI : MonoBehaviour
     public void EnemyReposition()
     {
         this.gameObject.SetActive(false);
+        Debug.Log("Enemy Script set this object to inactive");
         this.gameObject.transform.position = SpawnManager.Instance._spawnPoint.position;
         //ResetAI();
-        this.gameObject.SetActive(true);
-        //_botMeshRenderer.enabled = true;
+        //this.gameObject.SetActive(true);
+        _botMeshRenderer.enabled = true;
+
+        //Fix Respawn Issue attempt
+        _currentState = AIState.Walking;
+        _animator.SetBool("Hiding", false);
+        _animator.SetFloat("Speed", 4.9f);
+        _agent.speed = 4.9f;
     }
 
     public void SendPoints(int points)

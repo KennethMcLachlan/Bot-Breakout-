@@ -20,6 +20,8 @@ public class NewShootBehavior : MonoBehaviour
     private Ray _ray;
     private RaycastHit _hitInfo;
     public LayerMask _hitLayer;
+
+    private LayerMask _shieldLayer;
     void Start()
     {
         _ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
@@ -52,22 +54,27 @@ public class NewShootBehavior : MonoBehaviour
             {
                 RequestSpark();
 
+                //Enemy
                 EnemyAI enemy = _hitInfo.transform.GetComponent<EnemyAI>();
                 if (enemy != null)
                 {
                     enemy.Damage();
                     Debug.Log("Enemy Took Damage");
                 }
+                else
+                {
+                    //Shield
+                    ShieldBehavior shieldBehavior = _hitInfo.transform.GetComponent<ShieldBehavior>();
+                    if (shieldBehavior != null)
+                    {
+                        shieldBehavior.TakeHit();
+                        Debug.Log("Hit called on the Shield's TakeHit()");
+                    }
+                }
 
                 Debug.Log("Hit: " + _hitInfo.transform.name);
-
-                //HeavyEnemyAI heavyEnemy = _hitInfo.transform.GetComponent<HeavyEnemyAI>();
-                //if (heavyEnemy != null)
-                //{
-                //    heavyEnemy.Damage();
-                //    Debug.Log("Heavy Enemy took a hit");
-                //}
             }
+
         }
 
     }

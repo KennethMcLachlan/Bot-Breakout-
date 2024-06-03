@@ -31,6 +31,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private int _initialSpawnCount = 3;
     [SerializeField] private int _currentSpawnCount;
     [SerializeField] private float _spawnMultiplier = 0.5f;
+    private int _enemyCount;
 
     private bool _enemiesCanSpawn;
 
@@ -45,7 +46,7 @@ public class SpawnManager : MonoBehaviour
     {
         _currentSpawnCount = _initialSpawnCount;
         GenerateEnemies(_currentSpawnCount);
-        _enemiesCanSpawn = true;
+        _enemiesCanSpawn = true; //Temporary. Needs to be changed when new starter case is made
     }
 
     private void Update()
@@ -60,21 +61,32 @@ public class SpawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3.0f);
 
-        while (_enemiesCanSpawn == true)
-        {
+        //while (_enemiesCanSpawn == true)
+        //{
             
             for (int i = 0; i < _currentSpawnCount; i++)
             {
                 RequestEnemy();
-                yield return new WaitForSeconds(1.5f);
+                yield return new WaitForSeconds(1.5f); //Add random spawn in times
             }
 
-            _enemiesCanSpawn = false;
+           // _enemiesCanSpawn = false;
             StartCoroutine(WaveSetRoutine());
-            Debug.Log("Start Wave Set Routine");
-        }
+            Debug.Log("Start Wave Set Routine"); 
+        //}
     }
 
+    private bool AreAllEnemiesDead()
+    {
+        foreach(var enemy in _enemyPool)
+        {
+            if (enemy.activeInHierarchy == true)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private List<GameObject> GenerateEnemies(int amountOfEnemies)
     {
@@ -83,44 +95,12 @@ public class SpawnManager : MonoBehaviour
             GameObject enemy = Instantiate(_enemyPrefab, _spawnPoint.position, Quaternion.identity);
             enemy.transform.parent = _enemyContainer.transform;
             enemy.SetActive(false);
+            Debug.Log("Enemy.SetActive(false);");
             _enemyPool.Add(enemy);
         }
 
         return _enemyPool;
     }
-
-    //public GameObject RequestEnemy()
-    //{
-    //    foreach (var enemy in _enemyPool)
-    //    {
-    //        if (enemy.activeInHierarchy == false)
-    //        {
-    //            InitializeEnemy(enemy);
-    //            return enemy;
-    //        }
-    //    }
-
-    //    GameObject newEnemy = Instantiate(_enemyPrefab, _spawnPoint.position, Quaternion.identity);
-    //    InitializeEnemy(newEnemy);
-    //    _enemyPool.Add(newEnemy);
-    //    return newEnemy;
-    //}
-
-    //private void InitializeEnemy(GameObject enemy)
-    //{
-    //    enemy.transform.position = _spawnPoint.position;
-    //    enemy.transform.rotation = Quaternion.identity;
-    //    enemy.SetActive(true);
-    //    EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
-    //    if (enemyAI != null)
-    //    {
-    //        enemyAI.ResetAI();
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("EnemyAI component not found");
-    //    }
-    //}
 
     public GameObject RequestEnemy()
     {
@@ -131,7 +111,6 @@ public class SpawnManager : MonoBehaviour
                 enemy.transform.position = _spawnPoint.position;
                 enemy.transform.rotation = Quaternion.identity;
                 enemy.SetActive(true);
-                //enemy.GetComponent<EnemyAI>().ResetAI();
                 return enemy;
             }
         }
@@ -139,7 +118,6 @@ public class SpawnManager : MonoBehaviour
         GameObject newEnemy = Instantiate(_enemyPrefab, _spawnPoint.position, Quaternion.identity);
         newEnemy.transform.parent = _enemyContainer.transform;
         newEnemy.SetActive(true);
-        //newEnemy.GetComponent<EnemyAI>().ResetAI();
         _enemyPool.Add(newEnemy);
         return newEnemy;
     }
@@ -153,9 +131,18 @@ public class SpawnManager : MonoBehaviour
     {
         //UI and timing to explain the incoming round
         //Get ready Go!
+        Debug.Log("WaveSetRoutine Started");
         yield return new WaitForSeconds(8f);
+
+        while (AreAllEnemiesDead() == false)
+        {
+            Debug.Log("Enemies are not all dead");
+            //_enemiesCanSpawn = true;
+            yield return null;
+        }
+
         _currentSpawnCount = Mathf.CeilToInt(_currentSpawnCount * _spawnMultiplier);
-        _enemiesCanSpawn = true;
+        //_enemiesCanSpawn = true;
         StartCoroutine(EnemySpawnRoutine());
         Debug.Log("WaveSetRoutine Complete. Next wave will spawn: " + _currentSpawnCount + "enemies.");
     }
