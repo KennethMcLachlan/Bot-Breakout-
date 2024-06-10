@@ -22,7 +22,11 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private TMP_Text _score;
     [SerializeField] private TMP_Text _enemyTotal;
+    [SerializeField] private TMP_Text _waveText;
     [SerializeField] private Slider _wallHeath;
+
+    private int _waveNumber = 0;
+    private float _oneSecond = 1f;
 
     //Game Over Sequence
     [SerializeField] private GameObject _gameOverUI;
@@ -34,6 +38,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        _waveText.text = "";
+    }
     public void UpdateScore(int playerScore)
     {
         //Make a switch statement to update the score depending on which enemy was defeated
@@ -55,5 +63,30 @@ public class UIManager : MonoBehaviour
     public void GameOverSequence()
     {
         _gameOverUI.SetActive(true);
+    }
+
+    public void UpdateWaves()
+    {
+        _waveNumber += 1;
+        Debug.Log("UpdateWaves has been called on in the UI Manager");
+        StartCoroutine(WaveCountdownRoutine());
+    }
+
+    IEnumerator WaveCountdownRoutine()
+    {
+        _waveText.text = "Wave " + _waveNumber.ToString();
+        yield return new WaitForSeconds(3f);
+
+        _waveText.text = "3";
+        yield return new WaitForSeconds(_oneSecond);
+
+        _waveText.text = "2";
+        SpawnManager.Instance.StartEnemySpawn();
+        yield return new WaitForSeconds(_oneSecond);
+
+        _waveText.text = "1";
+        yield return new WaitForSeconds(_oneSecond);
+
+        _waveText.text = "";
     }
 }

@@ -34,7 +34,7 @@ public class SpawnManager : MonoBehaviour
     private int _enemyCount;
 
     private bool _enemiesCanSpawn;
-
+    private bool _enemiesAreActive;
     private bool _roundOver;
 
     private void Awake()
@@ -46,46 +46,46 @@ public class SpawnManager : MonoBehaviour
     {
         _currentSpawnCount = _initialSpawnCount;
         GenerateEnemies(_currentSpawnCount);
-        _enemiesCanSpawn = true; //Temporary. Needs to be changed when new starter case is made
+        //_enemiesCanSpawn = true; //Temporary. Needs to be changed when new starter case is made
+        _enemiesCanSpawn = false;
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P)) //Will be changed to a different starter case
         {
-            StartCoroutine(EnemySpawnRoutine());
+            UIManager.Instance.UpdateWaves();
         }
+
     }
 
     private IEnumerator EnemySpawnRoutine()
     {
+        //_enemiesCanSpawn = true;
+        _enemiesAreActive = true;
         yield return new WaitForSeconds(3.0f);
 
-        //while (_enemiesCanSpawn == true)
-        //{
-            
-            for (int i = 0; i < _currentSpawnCount; i++)
-            {
-                RequestEnemy();
-                yield return new WaitForSeconds(1.5f); //Add random spawn in times
-            }
+        for (int i = 0; i < _currentSpawnCount; i++)
+        {
+            RequestEnemy();
+            yield return new WaitForSeconds(1.5f); //Add random spawn in times
 
-           // _enemiesCanSpawn = false;
-            StartCoroutine(WaveSetRoutine());
-            Debug.Log("Start Wave Set Routine"); 
-        //}
+        }
+
+        
+        while (_enemiesAreActive == true)
+        {
+            EnemyPoolActivity();
+            yield return null;
+        }
+        
+        Debug.Log("Enemy Spawn has broke out of the FOR LOOP");
     }
 
-    private bool AreAllEnemiesDead()
+    public void StartEnemySpawn()
     {
-        foreach(var enemy in _enemyPool)
-        {
-            if (enemy.activeInHierarchy == true)
-            {
-                return false;
-            }
-        }
-        return true;
+        _currentSpawnCount = Mathf.CeilToInt(_currentSpawnCount * _spawnMultiplier);
+        StartCoroutine(EnemySpawnRoutine());
     }
 
     private List<GameObject> GenerateEnemies(int amountOfEnemies)
@@ -127,23 +127,21 @@ public class SpawnManager : MonoBehaviour
         return _waypoints;
     }
 
-    IEnumerator WaveSetRoutine()
+    private void EnemyPoolActivity()
     {
-        //UI and timing to explain the incoming round
-        //Get ready Go!
-        Debug.Log("WaveSetRoutine Started");
-        yield return new WaitForSeconds(8f);
-
-        while (AreAllEnemiesDead() == false)
+        _enemiesAreActive = false;
+        foreach (var enemy in _enemyPool)
         {
-            Debug.Log("Enemies are not all dead");
-            //_enemiesCanSpawn = true;
-            yield return null;
+            if (enemy.activeInHierarchy == true)
+            {
+                _enemiesAreActive = true;
+                break;
+            }
         }
 
-        _currentSpawnCount = Mathf.CeilToInt(_currentSpawnCount * _spawnMultiplier);
-        //_enemiesCanSpawn = true;
-        StartCoroutine(EnemySpawnRoutine());
-        Debug.Log("WaveSetRoutine Complete. Next wave will spawn: " + _currentSpawnCount + "enemies.");
+        if (_enemiesAreActive == false)
+        {
+            UIManager.Instance.UpdateWaves();
+        }
     }
 }
