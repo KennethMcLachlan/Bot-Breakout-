@@ -31,11 +31,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private int _initialSpawnCount = 3;
     [SerializeField] private int _currentSpawnCount;
     [SerializeField] private float _spawnMultiplier = 0.5f;
-    private int _enemyCount;
 
-    private bool _enemiesCanSpawn;
     private bool _enemiesAreActive;
-    private bool _roundOver;
 
     private void Awake()
     {
@@ -47,7 +44,6 @@ public class SpawnManager : MonoBehaviour
         _currentSpawnCount = _initialSpawnCount;
         GenerateEnemies(_currentSpawnCount);
         //_enemiesCanSpawn = true; //Temporary. Needs to be changed when new starter case is made
-        _enemiesCanSpawn = false;
     }
 
     private void Update()
@@ -68,7 +64,9 @@ public class SpawnManager : MonoBehaviour
         for (int i = 0; i < _currentSpawnCount; i++)
         {
             RequestEnemy();
-            yield return new WaitForSeconds(1.5f); //Add random spawn in times
+
+            float randomSpawnTime = Random.Range(0.5f, 2.5f);
+            yield return new WaitForSeconds(randomSpawnTime);
 
         }
 
@@ -111,6 +109,7 @@ public class SpawnManager : MonoBehaviour
                 enemy.transform.position = _spawnPoint.position;
                 enemy.transform.rotation = Quaternion.identity;
                 enemy.SetActive(true);
+
                 return enemy;
             }
         }

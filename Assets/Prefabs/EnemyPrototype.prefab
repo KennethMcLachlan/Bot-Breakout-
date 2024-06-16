@@ -2397,7 +2397,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 0
+  _enemyCollider: {fileID: 4673986709276413167}
   _hideDuration: 3
+  _minHideDuration: 3
+  _maxHideDuration: 5
 --- !u!195 &3113355941668178694
 NavMeshAgent:
   m_ObjectHideFlags: 0

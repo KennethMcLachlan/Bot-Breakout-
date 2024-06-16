@@ -18,9 +18,11 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private AIState _currentState;
     private NavMeshAgent _agent;
     private int _currentPoint = 0;
-    private bool _inReverse;
 
     private Animator _animator;
+
+    //Collider
+    [SerializeField] private CapsuleCollider _enemyCollider;
 
     //Enemy Death Explosion
     private GameObject _botExplosionContainer;
@@ -92,11 +94,12 @@ public class EnemyAI : MonoBehaviour
 
             case AIState.Walking:
                 Debug.Log("Enemy Is Walking");
+                _agent.SetDestination(_wayPoints[_currentPoint].position);
+
                 _animator.SetBool("Hiding", false);
                 _animator.SetFloat("Speed", 4.9f);
                 _agent.speed = 4.9f;
 
-                //CalculateMovement();
                 break;
 
             case AIState.Running:
@@ -105,7 +108,6 @@ public class EnemyAI : MonoBehaviour
                 _animator.SetFloat("Speed", 10f);
                 _agent.speed = 10;
 
-                //CalculateMovement();
                 break;
 
             case AIState.Hiding:
@@ -119,13 +121,14 @@ public class EnemyAI : MonoBehaviour
                     _hideDuration = Random.Range(_minHideDuration, _maxHideDuration);
                 }
 
-                //CalculateMovement();
                 break;
 
             case AIState.Death:
                 Debug.Log("Enemy is Playing Death Anim");
                 _animator.SetBool("Hiding", false);
                 _agent.speed = 0;
+
+                
                 break;
         }
 
@@ -141,18 +144,6 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
-
-    //private void CalculateMovement()
-    //{
-    //    if (_agent.remainingDistance < 0.5f)
-    //    {
-    //        RandomizeAIState();
-
-    //        _currentPoint = (_currentPoint + 1) % _wayPoints.Count;
-    //        _agent.SetDestination(_wayPoints[_currentPoint].position);
-    //    }
-
-    //}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -171,16 +162,6 @@ public class EnemyAI : MonoBehaviour
         _agent.SetDestination(_wayPoints[_currentPoint].position);
     }
 
-    //public void ResetAI()
-    //{
-    //    _currentState = AIState.Walking;
-    //    _currentPoint = 0;
-    //    _agent.SetDestination(_wayPoints[_currentPoint].position);
-    //    _animator.SetBool("Hiding", false);
-    //    _animator.SetFloat("Speed", 4.9f);
-    //    _agent.speed = 4.9f;
-    //    _botMeshRenderer.enabled = true;
-    //}
     public void WaypointReceiver()
     {
         SpawnManager.Instance.SendWaypoints();
@@ -188,32 +169,25 @@ public class EnemyAI : MonoBehaviour
 
     public void Damage()
     {
-        _animator.SetTrigger("Death");
         _currentState = AIState.Death;
-        //Invoke("ExplodingBot", 3);
+        _animator.SetTrigger("Death");
         StartCoroutine(BotDeathSequence());
-        //_botExplosion.Play();
         SendPoints(100);
         SendEnemyCount(1);
     }
 
-    //private void ExplodingBot()
-    //{
-    //    _botExplosion.Play();
-    //    Invoke("EnemyReposition", 3f);
-    //}
-
     private IEnumerator BotDeathSequence()
     {
-        //yield return new WaitForSeconds(2.25f);
+        _enemyCollider.GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(3f);
+
         _botDeathSFX.Play();
         _botExplosion.Play();
         yield return new WaitForSeconds(1f);
 
         _botMeshRenderer.enabled = false;
-
         yield return new WaitForSeconds(4f);
+
         EnemyReposition();
     }
     public void SelfDestruct()
@@ -223,18 +197,15 @@ public class EnemyAI : MonoBehaviour
 
     public void EnemyReposition()
     {
+        _currentState = AIState.Death;
+
         this.gameObject.SetActive(false);
-        Debug.Log("Enemy Script set this object to inactive");
         this.gameObject.transform.position = SpawnManager.Instance._spawnPoint.position;
-        //ResetAI();
-        //this.gameObject.SetActive(true);
+
+        _enemyCollider.GetComponent<Collider>().enabled = true;
         _botMeshRenderer.enabled = true;
 
-        //Fix Respawn Issue attempt
         _currentState = AIState.Walking;
-        _animator.SetBool("Hiding", false);
-        _animator.SetFloat("Speed", 4.9f);
-        _agent.speed = 4.9f;
     }
 
     public void SendPoints(int points)

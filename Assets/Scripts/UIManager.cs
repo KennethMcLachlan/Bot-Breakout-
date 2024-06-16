@@ -23,7 +23,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text _score;
     [SerializeField] private TMP_Text _enemyTotal;
     [SerializeField] private TMP_Text _waveText;
-    [SerializeField] private Slider _wallHeath;
+    [SerializeField] private TMP_Text _warningText;
+    [SerializeField] private Slider _wallHealth;
+
+    [SerializeField] private Animator _warningTextAnim;
 
     private int _waveNumber = 0;
     private float _oneSecond = 1f;
@@ -41,6 +44,18 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         _waveText.text = "";
+
+        _warningTextAnim = GetComponentInChildren<Animator>();
+        if (_warningTextAnim == null)
+        {
+            Debug.LogError("Warning Text Animator is NULL");
+        }
+
+    }
+
+    private void Update()
+    {
+        
     }
     public void UpdateScore(int playerScore)
     {
@@ -57,7 +72,33 @@ public class UIManager : MonoBehaviour
 
     public void UpdateWallHealth(int health)
     {
-        _wallHeath.value = health;
+        _wallHealth.value = health;
+
+        if (health > 75)
+        {
+            _warningTextAnim.SetBool("LowHealth", false);
+            Debug.Log("Wall Integrity is greater than half");
+        }
+
+        if (health <= 75)
+        {
+            _warningTextAnim.SetBool("LowHealth", true);
+            Debug.Log("Wall Integrity is below half");
+        }
+
+        if (health <= 25)
+        {
+            _warningText.GetComponent<TMP_Text>().color = Color.red;
+        }
+    }
+
+    private void IncreaseWallIntegrity(float percentage)
+    {
+        float currentHealth = _wallHealth.value;
+        float increaseHealth = currentHealth * percentage / 100f;
+        _wallHealth.value = currentHealth + increaseHealth;
+
+        UpdateWallHealth((int)_wallHealth.value);
     }
 
     public void GameOverSequence()
@@ -69,12 +110,14 @@ public class UIManager : MonoBehaviour
     {
         _waveNumber += 1;
         Debug.Log("UpdateWaves has been called on in the UI Manager");
+        IncreaseWallIntegrity(30f);
         StartCoroutine(WaveCountdownRoutine());
     }
 
     IEnumerator WaveCountdownRoutine()
     {
         _waveText.text = "Wave " + _waveNumber.ToString();
+        
         yield return new WaitForSeconds(3f);
 
         _waveText.text = "3";

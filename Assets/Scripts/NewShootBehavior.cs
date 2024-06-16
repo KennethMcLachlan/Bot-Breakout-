@@ -21,7 +21,12 @@ public class NewShootBehavior : MonoBehaviour
     private RaycastHit _hitInfo;
     public LayerMask _hitLayer;
 
-    private LayerMask _shieldLayer;
+    [SerializeField] private float _fireRate = 0.5f;
+    private float _canFire = -1f;
+
+    //PowerUp Variables
+    [SerializeField] private bool _fullAutoIsActive;
+
     void Start()
     {
         _ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
@@ -43,47 +48,76 @@ public class NewShootBehavior : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (_fullAutoIsActive == true)
         {
-            _gunShotSFX.Play();
-            _muzzleFlash.Play();
-
-            _ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
-
-            if (Physics.Raycast(_ray, out _hitInfo, Mathf.Infinity, _hitLayer))
+            _fireRate = 0.1f;
+            if (Input.GetMouseButton(0) && Time.time > _canFire) //Rapid Fire
             {
-                RequestSpark();
+                FireWeapon();
+            }
+        }
+        else
+        {
+            _fireRate = 0.6f;
+            if (Input.GetMouseButtonDown(0) && Time.time > _canFire) //Regular Fire
+            {
+                FireWeapon();
+            }
+        }
+    }
 
-                //Enemy
-                EnemyAI enemy = _hitInfo.transform.GetComponent<EnemyAI>();
-                if (enemy != null)
-                {
-                    enemy.Damage();
-                    Debug.Log("Enemy Took Damage");
-                }
-                else
-                {
-                    //Shield
-                    ShieldBehavior shieldBehavior = _hitInfo.transform.GetComponent<ShieldBehavior>();
-                    if (shieldBehavior != null)
-                    {
-                        shieldBehavior.TakeHit();
-                        Debug.Log("Hit called on the Shield's TakeHit()");
-                    }
-                }
+    private void FireWeapon()
+    {
+        _canFire = Time.time + _fireRate;
+        _gunShotSFX.Play();
+        _muzzleFlash.Play();
 
-                Debug.Log("Hit: " + _hitInfo.transform.name);
+        _ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+
+        if (Physics.Raycast(_ray, out _hitInfo, Mathf.Infinity, _hitLayer))
+        {
+            RequestSpark();
+
+            //Enemy
+            EnemyAI enemy = _hitInfo.transform.GetComponent<EnemyAI>();
+            if (enemy != null)
+            {
+                enemy.Damage();
+                Debug.Log("Enemy Took Damage");
+            }
+            else
+            {
+                //Shield
+                ShieldBehavior shieldBehavior = _hitInfo.transform.GetComponent<ShieldBehavior>();
+                if (shieldBehavior != null)
+                {
+                    shieldBehavior.TakeHit();
+                    Debug.Log("Hit called on the Shield's TakeHit()");
+                }
             }
 
+            Debug.Log("Hit: " + _hitInfo.transform.name);
         }
+    }
 
+    public void RecieveRapidFire()
+    {
+        _fullAutoIsActive = true;
+        StartCoroutine(RapidFireActivityRoutine());
+    }
+    private IEnumerator RapidFireActivityRoutine()
+    {
+        if (_fullAutoIsActive == true)
+        {
+            yield return new WaitForSeconds(5f);
+            _fullAutoIsActive = false;
+        }
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(_ray.origin, _hitInfo.point);
-  
     }
 
     private void GenerateSparkHitPool(int amountOfSparks)
