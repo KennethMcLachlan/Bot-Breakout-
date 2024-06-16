@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ShieldBehavior : MonoBehaviour
@@ -11,12 +12,12 @@ public class ShieldBehavior : MonoBehaviour
     [SerializeField] private float _cooldownTimer = 0f;
     [SerializeField] private float _cooldownDuration = 30f;
 
-
+    [SerializeField] private AudioSource _shieldDown;
+    [SerializeField] private AudioSource _shieldUp;
 
     //Shield Variables
     private MeshRenderer _meshRenderer;
     private SphereCollider _collider;
-    //private float _globalAlpha = 0.33f;
 
     private bool _isCoolingDown;
 
@@ -45,9 +46,9 @@ public class ShieldBehavior : MonoBehaviour
             _meshRenderer.material.color = alpha;
         }
 
-        if (_health <= 0)
+        if (_health <= 0 && !_isCoolingDown)
         {
-            Debug.Log("Shield has been destroyed");
+            _shieldDown.Play();
             _meshRenderer.enabled = false;
             _collider.enabled = false;
             _isCoolingDown = true;
@@ -57,10 +58,9 @@ public class ShieldBehavior : MonoBehaviour
         {
             Debug.Log("Shield is cooling down");
             _cooldownTimer += Time.deltaTime;
-            Debug.Log("TimerIsRunning");
             if (_cooldownTimer >= _cooldownDuration)
             {
-                Debug.Log("TimerHasFinished");
+                _shieldUp.Play();
                 _meshRenderer.enabled = true;
                 _collider.enabled = true;
                 _cooldownTimer = 0f;
@@ -70,11 +70,10 @@ public class ShieldBehavior : MonoBehaviour
             }
         }
     }
+
     public void TakeHit()
     {
         _health--;
-        Debug.Log("Shield Health has gone down by 1 health");
     }
-
 
 }
