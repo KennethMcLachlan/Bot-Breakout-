@@ -85,16 +85,16 @@ public class NewShootBehavior : MonoBehaviour
                 enemy.Damage();
                 Debug.Log("Enemy Took Damage");
             }
-            else
+
+
+            //Shield
+            ShieldBehavior shieldBehavior = _hitInfo.transform.GetComponent<ShieldBehavior>();
+            if (shieldBehavior != null)
             {
-                //Shield
-                ShieldBehavior shieldBehavior = _hitInfo.transform.GetComponent<ShieldBehavior>();
-                if (shieldBehavior != null)
-                {
-                    shieldBehavior.TakeHit();
-                    Debug.Log("Hit called on the Shield's TakeHit()");
-                }
+                shieldBehavior.TakeHit();
+                Debug.Log("Hit called on the Shield's TakeHit()");
             }
+
 
             Debug.Log("Hit: " + _hitInfo.transform.name);
         }

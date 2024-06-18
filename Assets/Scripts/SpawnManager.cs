@@ -43,7 +43,6 @@ public class SpawnManager : MonoBehaviour
     {
         _currentSpawnCount = _initialSpawnCount;
         GenerateEnemies(_currentSpawnCount);
-        //_enemiesCanSpawn = true; //Temporary. Needs to be changed when new starter case is made
     }
 
     private void Update()
@@ -57,7 +56,6 @@ public class SpawnManager : MonoBehaviour
 
     private IEnumerator EnemySpawnRoutine()
     {
-        //_enemiesCanSpawn = true;
         _enemiesAreActive = true;
         yield return new WaitForSeconds(3.0f);
 
@@ -70,14 +68,12 @@ public class SpawnManager : MonoBehaviour
 
         }
 
-        
         while (_enemiesAreActive == true)
         {
             EnemyPoolActivity();
             yield return null;
         }
         
-        Debug.Log("Enemy Spawn has broke out of the FOR LOOP");
     }
 
     public void StartEnemySpawn()
