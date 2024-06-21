@@ -115,6 +115,7 @@ public class UIManager : MonoBehaviour
 
     IEnumerator WaveCountdownRoutine()
     {
+        PowerUpSpawnManager.Instance.WavesAreInactive();
         _waveText.text = "Wave " + _waveNumber.ToString();
         
         yield return new WaitForSeconds(3f);
@@ -129,6 +130,7 @@ public class UIManager : MonoBehaviour
         _waveText.text = "1";
         yield return new WaitForSeconds(_oneSecond);
 
+        PowerUpSpawnManager.Instance.WavesAreActive();
         _waveText.text = "";
     }
 }

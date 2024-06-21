@@ -89,7 +89,6 @@ public class SpawnManager : MonoBehaviour
             GameObject enemy = Instantiate(_enemyPrefab, _spawnPoint.position, Quaternion.identity);
             enemy.transform.parent = _enemyContainer.transform;
             enemy.SetActive(false);
-            Debug.Log("Enemy.SetActive(false);");
             _enemyPool.Add(enemy);
         }
 

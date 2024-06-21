@@ -63,9 +63,9 @@ public class BoothMovement : MonoBehaviour
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
-        if (transform.position.y <= -237f)
+        if (transform.position.y <= -241f)
         {
-            transform.position = new Vector3(transform.position.x, -237, 106.0932f);
+            transform.position = new Vector3(transform.position.x, -241, 106.0932f);
         }
     }
 }
