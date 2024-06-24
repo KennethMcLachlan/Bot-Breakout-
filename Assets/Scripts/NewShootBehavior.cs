@@ -17,7 +17,10 @@ public class NewShootBehavior : MonoBehaviour
 
     private float _despawnRate = 3.0f;
 
+    //SFX
     [SerializeField] private AudioSource _gunShotSFX;
+    [SerializeField] private AudioSource _powerupSFX;
+    [SerializeField] private AudioSource _grenadeExplosionSFX;
 
     [SerializeField] private GameObject _muzzleFlashContainer;
     private ParticleSystem _muzzleFlash;
@@ -41,12 +44,6 @@ public class NewShootBehavior : MonoBehaviour
     {
         _ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
 
-        _gunShotSFX = GetComponent<AudioSource>();
-        if (_gunShotSFX == null)
-        {
-            Debug.Log("Gunshot audio is NULL");
-        }
-
         GenerateSparkHitPool(10);
         GenerateGrenadeHitPool(5);
 
@@ -61,7 +58,7 @@ public class NewShootBehavior : MonoBehaviour
     {
         if (_grenadeLauncherIsActive == true)
         {
-            _fireRate = 0.5f;
+            _fireRate = 0.7f;
             if (Input.GetMouseButton(0) && Time.time > _canFire)
             {
                 FireGrenade();
@@ -77,7 +74,7 @@ public class NewShootBehavior : MonoBehaviour
         }
         else
         {
-            _fireRate = 0.6f;
+            _fireRate = 0.5f;
             if (Input.GetMouseButtonDown(0) && Time.time > _canFire) //Regular Fire
             {
                 FireWeapon();
@@ -118,15 +115,28 @@ public class NewShootBehavior : MonoBehaviour
             RapidFirePowerup rapidFirePowerup = _hitInfo.transform.GetComponent<RapidFirePowerup>();
             if (rapidFirePowerup != null)
             {
+                _powerupSFX.Play();
                 rapidFirePowerup.TakeHit();
             }
 
             GrenadePowerup grenadePowerup = _hitInfo.transform.GetComponent<GrenadePowerup>();
             if (grenadePowerup != null)
             {
+                _powerupSFX.Play();
                 grenadePowerup.TakeHit();
             }
-            
+
+            ShieldPowerup shieldPowerup = _hitInfo.transform.GetComponent<ShieldPowerup>();
+            if (shieldPowerup != null)
+            {
+                shieldPowerup.TakeHit();
+            }
+
+            NukePowerup nukePowerup = _hitInfo.transform.GetComponent<NukePowerup>();
+            if (nukePowerup != null)
+            {
+                nukePowerup.TakeHit();
+            }
 
             Debug.Log("Hit: " + _hitInfo.transform.name);
         }
@@ -135,7 +145,7 @@ public class NewShootBehavior : MonoBehaviour
     private void FireGrenade()
     {
         _canFire = Time.time + _fireRate;
-        _gunShotSFX.Play(); //Get Grenade Launcher SFX
+        _grenadeExplosionSFX.Play(); //Get Grenade Launcher SFX
         _muzzleFlash.Play(); //Maybe new muzzle flash??
 
         _ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
@@ -162,17 +172,17 @@ public class NewShootBehavior : MonoBehaviour
 
             //PowerUps
 
-            RapidFirePowerup rapidFirePowerup = _hitInfo.transform.GetComponent<RapidFirePowerup>();
-            if (rapidFirePowerup != null)
-            {
-                rapidFirePowerup.TakeHit();
-            }
+            //RapidFirePowerup rapidFirePowerup = _hitInfo.transform.GetComponent<RapidFirePowerup>();
+            //if (rapidFirePowerup != null)
+            //{
+            //    rapidFirePowerup.TakeHit();
+            //}
 
-            GrenadePowerup grenadePowerup = _hitInfo.transform.GetComponent<GrenadePowerup>();
-            if (grenadePowerup != null)
-            {
-                grenadePowerup.TakeHit();
-            }
+            //GrenadePowerup grenadePowerup = _hitInfo.transform.GetComponent<GrenadePowerup>();
+            //if (grenadePowerup != null)
+            //{
+            //    grenadePowerup.TakeHit();
+            //}
 
             Debug.Log("Hit: " + _hitInfo.transform.name);
         }
@@ -287,7 +297,6 @@ public class NewShootBehavior : MonoBehaviour
         grenade.SetActive(true);
 
         GrenadeExplosion(grenade);
-        //StartCoroutine(DeactivateGrenadeAfterDelay(grenade, _despawnRate));
     }
 
     private void GrenadeExplosion(GameObject grenade)
@@ -308,8 +317,12 @@ public class NewShootBehavior : MonoBehaviour
 
     private IEnumerator DeactivateGrenadeAfterDelay(GameObject grenade, float delay)
     {
+        var collider = grenade.GetComponent<SphereCollider>();
+        collider.enabled = false; //Disables the Grenade Collider
+
         yield return new WaitForSeconds(delay);
         grenade.SetActive(false);
+        collider.enabled = true; //Enables the Collider of the inactive grenade
     }
 
     public void RecieveGrenadeLauncher()
@@ -322,7 +335,7 @@ public class NewShootBehavior : MonoBehaviour
     {
         if (_grenadeLauncherIsActive == true)
         {
-            yield return new WaitForSeconds(_rapidFireDuration);
+            yield return new WaitForSeconds(_rapidFireDuration); //May need to change vaiarble to _powerupDuration
             _grenadeLauncherIsActive = false;
         }
     }

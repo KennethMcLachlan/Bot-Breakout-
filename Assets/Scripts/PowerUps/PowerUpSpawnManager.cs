@@ -24,8 +24,6 @@ public class PowerUpSpawnManager : MonoBehaviour
     [SerializeField] private Transform[] _powerupSpawnPoints;
     [SerializeField] private List<GameObject> _powerupPool;
 
-    private NewShootBehavior _newShootBehavior;
-
     private int _powerupID;
 
     private bool _waveIsActive;
@@ -33,14 +31,6 @@ public class PowerUpSpawnManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-    }
-    void Start()
-    {
-        _newShootBehavior = GameObject.Find("Player").GetComponent<NewShootBehavior>();
-        if (_newShootBehavior == null)
-        {
-            Debug.LogError("Powerup Manager has not accessed the Player Script");
-        }
     }
     
     private void RandomizePowerupIcon()
@@ -51,23 +41,42 @@ public class PowerUpSpawnManager : MonoBehaviour
         {
             case 0:
                 //Rapid Fire
-                //_newShootBehavior.RecieveRapidFire();
-                //Random Reposition
                 powerupToReposition = _powerupPool[0];
                 break;
             case 1:
-                //GrenadeLauncher
-                //Random Reposition
-                powerupToReposition = _powerupPool[1];
+                //Rapid Fire
+                powerupToReposition = _powerupPool[0];
                 break;
             case 2:
-                //Nuke
-                //Random Reposition
-                powerupToReposition = _powerupPool[2];
+                //Rapid Fire
+                powerupToReposition = _powerupPool[0];
                 break;
             case 3:
+                //Rapid Fire
+                powerupToReposition = _powerupPool[0];
+                break;
+            case 4:
+                //GrenadeLauncher
+                powerupToReposition = _powerupPool[1];
+                break;
+            case 5:
+                //GrenadeLauncher
+                powerupToReposition = _powerupPool[1];
+                break;
+            case 6:
+                //GrenadeLauncher
+                powerupToReposition = _powerupPool[1];
+                break;
+            case 7:
                 //Shield remover
-                //Random Reposition
+                powerupToReposition = _powerupPool[2];
+                break;
+            case 8:
+                //Shield remover
+                powerupToReposition = _powerupPool[2];
+                break;
+            case 9:
+                //Nuke
                 powerupToReposition = _powerupPool[3];
                 break;
             default:
@@ -79,6 +88,7 @@ public class PowerUpSpawnManager : MonoBehaviour
         {
             RepositionPowerup(powerupToReposition);
             powerupToReposition.SetActive(true);
+            StartCoroutine(DeactivatePowerupRoutine(powerupToReposition));
         }
 
     }
@@ -89,8 +99,8 @@ public class PowerUpSpawnManager : MonoBehaviour
 
         while (_waveIsActive == true)
         {
-            int randomPowerupID = Random.Range(0, 3);
-            float randomPowerUpSpawnTime = Random.Range(1f, 5f); //Adjust time. Was at 15f, 45f
+            int randomPowerupID = Random.Range(0, 10); //Adjust this range to match powerups
+            float randomPowerUpSpawnTime = Random.Range(15f, 45f);
 
             yield return new WaitForSeconds(randomPowerUpSpawnTime);
             _powerupID = randomPowerupID;
@@ -104,14 +114,19 @@ public class PowerUpSpawnManager : MonoBehaviour
         powerup.transform.position = _powerupSpawnPoints[randomSpawnPoint].position;
     }
 
-    //Recieves Notification that the Wave is active
+    private IEnumerator DeactivatePowerupRoutine(GameObject powerup)
+    {
+        yield return new WaitForSeconds(10f);
+        powerup.SetActive(false);
+    }
+    //Receives Notification that the Wave is active
     public void WavesAreActive()
     {
         _waveIsActive = true;
         StartCoroutine(SpawnPowerupRoutine());
     }
 
-    //Recieves Notification that Waves are inactive
+    //Receives Notification that Waves are inactive
     public void WavesAreInactive()
     {
         _waveIsActive = false;
