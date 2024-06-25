@@ -23,7 +23,7 @@ public class NukeBehavior : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, _cubeExtents * 2); // says that half Extents should be * 2
+        Gizmos.DrawWireCube(transform.position, _cubeExtents * 2);
     }
 
     public void RecievePowerupNotification()
