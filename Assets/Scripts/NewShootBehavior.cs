@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal.Internal;
+using Cinemachine;
 
 public class NewShootBehavior : MonoBehaviour
 {
+    //Cinemachine Main Camera
+    [SerializeField] private CinemachineVirtualCamera _virtualCamera;
+
     //Spark On Hit
     [SerializeField] private List<GameObject> _sparkHitPool;
     [SerializeField] private GameObject _sparkPrefab;
@@ -15,16 +18,16 @@ public class NewShootBehavior : MonoBehaviour
     [SerializeField] private GameObject _grenadeContainer;
     [SerializeField] private GameObject _grenadePrefab;
 
-    private float _despawnRate = 3.0f;
-
     //SFX
     [SerializeField] private AudioSource _gunShotSFX;
     [SerializeField] private AudioSource _powerupSFX;
     [SerializeField] private AudioSource _grenadeExplosionSFX;
 
+    //Muzzle Flash
     [SerializeField] private GameObject _muzzleFlashContainer;
     private ParticleSystem _muzzleFlash;
 
+    //Raycast Variables
     private Ray _ray;
     private RaycastHit _hitInfo;
     public LayerMask _hitLayer;
@@ -40,9 +43,11 @@ public class NewShootBehavior : MonoBehaviour
     [SerializeField] private bool _fullAutoIsActive;
     [SerializeField] private bool _grenadeLauncherIsActive;
 
+    private float _despawnRate = 3.0f;
+
     void Start()
     {
-        _ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+        ////_ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f);
 
         GenerateSparkHitPool(10);
         GenerateGrenadeHitPool(5);
@@ -169,20 +174,6 @@ public class NewShootBehavior : MonoBehaviour
                 shieldBehavior.TakeHit();
                 Debug.Log("Hit called on the Shield's TakeHit()");
             }
-
-            //PowerUps
-
-            //RapidFirePowerup rapidFirePowerup = _hitInfo.transform.GetComponent<RapidFirePowerup>();
-            //if (rapidFirePowerup != null)
-            //{
-            //    rapidFirePowerup.TakeHit();
-            //}
-
-            //GrenadePowerup grenadePowerup = _hitInfo.transform.GetComponent<GrenadePowerup>();
-            //if (grenadePowerup != null)
-            //{
-            //    grenadePowerup.TakeHit();
-            //}
 
             Debug.Log("Hit: " + _hitInfo.transform.name);
         }
@@ -335,7 +326,7 @@ public class NewShootBehavior : MonoBehaviour
     {
         if (_grenadeLauncherIsActive == true)
         {
-            yield return new WaitForSeconds(_rapidFireDuration); //May need to change vaiarble to _powerupDuration
+            yield return new WaitForSeconds(_rapidFireDuration);
             _grenadeLauncherIsActive = false;
         }
     }

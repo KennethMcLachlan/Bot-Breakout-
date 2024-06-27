@@ -45,15 +45,6 @@ public class SpawnManager : MonoBehaviour
         GenerateEnemies(_currentSpawnCount);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P)) //Will be changed to a different starter case
-        {
-            UIManager.Instance.UpdateWaves();
-        }
-
-    }
-
     private IEnumerator EnemySpawnRoutine()
     {
         _enemiesAreActive = true;

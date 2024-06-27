@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
 {
@@ -41,11 +42,11 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
         [SerializeField][Tooltip("Control the look sensitivty of the camera")]
         private float _lookSensitivity = 5.0f; //mouse sensitivity 
 
-        private Camera _fpsCamera;
+        private CinemachineVirtualCamera _fpsCamera;
         private void Start()
         {
             _controller = GetComponent<CharacterController>(); //assign the reference variable to the component
-            _fpsCamera = GetComponentInChildren<Camera>();
+            _fpsCamera = GetComponentInChildren<CinemachineVirtualCamera>();
             _initialCameraPos = _fpsCamera.transform.localPosition;
             Cursor.lockState = CursorLockMode.Locked;
         }

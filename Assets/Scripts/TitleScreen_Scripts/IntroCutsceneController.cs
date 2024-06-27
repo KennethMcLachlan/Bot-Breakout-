@@ -12,21 +12,22 @@ public class IntroCutsceneController : MonoBehaviour
     [SerializeField] private GameObject _bgMusic;
     [SerializeField] private GameObject _explosionContainer;
 
-    private bool _anyKeyIsEnabled;
+    private bool _anyKeyIsDisabled;
     private bool _playerCanSkip;
 
     void Start()
     {
         _playableDirector = GetComponent<PlayableDirector>();
+        StartCoroutine(SkipTextPreventionRoutine());
     }
     void Update()
     {
-        if (_anyKeyIsEnabled == false && Input.anyKey)
+        if (_anyKeyIsDisabled == false && Input.anyKey)
         {
             //_skipTextIsActive = true;
             _textToSkip.SetActive(true);
             StartCoroutine(HoldToSetBoolRoutine());
-            _anyKeyIsEnabled = true;
+            _anyKeyIsDisabled = true;
 
         }
 
@@ -49,6 +50,13 @@ public class IntroCutsceneController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         _playerCanSkip = true;
+    }
+
+    private IEnumerator SkipTextPreventionRoutine()
+    {
+        yield return new WaitForSeconds(10f);
+        _anyKeyIsDisabled = true;
+        _textToSkip.SetActive(false);
     }
 }
 

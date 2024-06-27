@@ -99,7 +99,7 @@ public class PowerUpSpawnManager : MonoBehaviour
 
         while (_waveIsActive == true)
         {
-            int randomPowerupID = Random.Range(0, 10); //Adjust this range to match powerups
+            int randomPowerupID = Random.Range(0, 10);
             float randomPowerUpSpawnTime = Random.Range(15f, 45f);
 
             yield return new WaitForSeconds(randomPowerUpSpawnTime);
@@ -114,11 +114,13 @@ public class PowerUpSpawnManager : MonoBehaviour
         powerup.transform.position = _powerupSpawnPoints[randomSpawnPoint].position;
     }
 
+    //Unlaimed Powerup will be set to "inactive" after duration
     private IEnumerator DeactivatePowerupRoutine(GameObject powerup)
     {
         yield return new WaitForSeconds(10f);
         powerup.SetActive(false);
     }
+
     //Receives Notification that the Wave is active
     public void WavesAreActive()
     {
