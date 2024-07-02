@@ -24,7 +24,7 @@ public class FinishingWall : MonoBehaviour
     {
         if (_wallHealth <= 0)
         {
-            Time.timeScale = 0;
+            Time.timeScale = 0.0f;
             UIManager.Instance.GameOverSequence();
             //Initiate Game Over Sequence
         }

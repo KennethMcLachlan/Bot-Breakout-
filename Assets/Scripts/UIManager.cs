@@ -102,6 +102,7 @@ public class UIManager : MonoBehaviour
 
     public void GameOverSequence()
     {
+        Time.timeScale = 0.0f;
         _gameOverUI.SetActive(true);
     }
 

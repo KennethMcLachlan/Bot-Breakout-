@@ -11,6 +11,11 @@ public class GameCutsceneController : MonoBehaviour
     [SerializeField] private GameObject _textToSkip;
     [SerializeField] private GameObject _player;
     [SerializeField] private GameObject _startGameManager;
+    [SerializeField] private GameObject _resetAssetPositionManager;
+    [SerializeField] private GameObject _pauseMenuManager;
+    [SerializeField] private GameObject _slidingDoor;
+    [SerializeField] private GameObject _cutSceneDoor;
+    [SerializeField] private GameObject _npc;
 
     private bool _anyKeyIsDisabled;
     private bool _playerCanSkip;
@@ -43,6 +48,12 @@ public class GameCutsceneController : MonoBehaviour
         _textToSkip.SetActive(false);
         _canvas.SetActive(true);
         _startGameManager.SetActive(true);
+        _resetAssetPositionManager.SetActive(true);
+        _pauseMenuManager.SetActive(true);
+        _slidingDoor.SetActive(true);
+        _cutSceneDoor.SetActive(false);
+        _npc.transform.position = new Vector3(0f, 9.9f, 60f);
+
     }
 
     private IEnumerator HoldToSetBoolRoutine()
