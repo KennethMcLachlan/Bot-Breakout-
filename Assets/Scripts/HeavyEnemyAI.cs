@@ -122,6 +122,6 @@ public class HeavyEnemyAI : MonoBehaviour
     {
         _points += points;
 
-        UIManager.Instance.UpdateScore(_points);
+        //UIManager.Instance.UpdateScore(_points);
     }
 }

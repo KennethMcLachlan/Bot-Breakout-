@@ -23,9 +23,9 @@ public class NewShootBehavior : MonoBehaviour
     [SerializeField] private AudioSource _powerupSFX;
     [SerializeField] private AudioSource _grenadeExplosionSFX;
 
-    //Muzzle Flash
+    //Muzzle Flash Variables
     [SerializeField] private GameObject _muzzleFlashContainer;
-    private ParticleSystem _muzzleFlash;
+    public ParticleSystem _muzzleFlash;
 
     //Raycast Variables
     private Ray _ray;
@@ -92,6 +92,7 @@ public class NewShootBehavior : MonoBehaviour
         _canFire = Time.time + _fireRate;
         _gunShotSFX.Play();
         _muzzleFlash.Play();
+        Debug.Log("MuzzleFlash just Played");
 
         _ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
 

@@ -28,6 +28,10 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private Animator _warningTextAnim;
 
+    //Score & Counter
+    private int _points;
+    private int _enemyCount;
+
     private int _waveNumber = 0;
     private float _oneSecond = 1f;
 
@@ -57,16 +61,28 @@ public class UIManager : MonoBehaviour
     {
         
     }
-    public void UpdateScore(int playerScore)
-    {
-        Debug.Log("Updating Score: " + playerScore);
-        _score.text = playerScore.ToString();
-    }
+    //public void UpdateScore(int playerScore)
+    //{
+    //    Debug.Log("Updating Score: " + playerScore);
+    //    _score.text = playerScore.ToString();
+    //}
 
-    public void UpdateEnemyCount(int enemyCount)
+    //public void UpdateEnemyCount(int enemyCount)
+    //{
+    //    Debug.Log("Updating Enemy Count: " + enemyCount);
+    //    _enemyTotal.text = enemyCount.ToString();
+    //}
+
+    public void UpdateScoreAndEnemyCount()
     {
-        Debug.Log("Updating Enemy Count: " + enemyCount);
-        _enemyTotal.text = enemyCount.ToString();
+        //Score
+        _points += 100;
+        _score.text = _points.ToString();
+
+        //EnemyCount
+        _enemyCount += 1;
+        _enemyTotal.text = _enemyCount.ToString();
+
     }
 
     public void UpdateWallHealth(int health)

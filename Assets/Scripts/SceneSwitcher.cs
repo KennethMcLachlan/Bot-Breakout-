@@ -14,6 +14,8 @@ public class SceneSwitcher : MonoBehaviour
     public void PlayGame()
     {
         Time.timeScale = 1.0f;
-        SceneManager.LoadScene("GLI_1");
+        SceneManager.LoadScene("MainGame");
     }
+
+
 }
