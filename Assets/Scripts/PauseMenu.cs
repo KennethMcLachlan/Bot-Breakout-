@@ -45,11 +45,6 @@ public class PauseMenu : MonoBehaviour
             _pauseMenu.SetActive(false);
         }
     }
-    //public void OpenMenu()
-    //{
-    //    Time.timeScale = 0.0f;
-    //    _pauseMenu.SetActive(true);
-    //}
 
     public void ResumeGame()
     {

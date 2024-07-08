@@ -47,8 +47,6 @@ public class NewShootBehavior : MonoBehaviour
 
     void Start()
     {
-        ////_ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f);
-
         GenerateSparkHitPool(10);
         GenerateGrenadeHitPool(5);
 
@@ -151,8 +149,8 @@ public class NewShootBehavior : MonoBehaviour
     private void FireGrenade()
     {
         _canFire = Time.time + _fireRate;
-        _grenadeExplosionSFX.Play(); //Get Grenade Launcher SFX
-        _muzzleFlash.Play(); //Maybe new muzzle flash??
+        _grenadeExplosionSFX.Play();
+        _muzzleFlash.Play();
 
         _ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
 
@@ -189,7 +187,7 @@ public class NewShootBehavior : MonoBehaviour
     {
         if (_fullAutoIsActive == true)
         {
-            yield return new WaitForSeconds(_rapidFireDuration); // Currently set to 5 seconds
+            yield return new WaitForSeconds(_rapidFireDuration); // Currently set to 10 seconds
             _fullAutoIsActive = false;
         }
     }

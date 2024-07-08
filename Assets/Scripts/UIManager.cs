@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text _enemyTotal;
     [SerializeField] private TMP_Text _waveText;
     [SerializeField] private TMP_Text _warningText;
+    [SerializeField] private TMP_Text _finalScore;
     [SerializeField] private Slider _wallHealth;
 
     [SerializeField] private Animator _warningTextAnim;
@@ -56,22 +57,6 @@ public class UIManager : MonoBehaviour
         }
 
     }
-
-    private void Update()
-    {
-        
-    }
-    //public void UpdateScore(int playerScore)
-    //{
-    //    Debug.Log("Updating Score: " + playerScore);
-    //    _score.text = playerScore.ToString();
-    //}
-
-    //public void UpdateEnemyCount(int enemyCount)
-    //{
-    //    Debug.Log("Updating Enemy Count: " + enemyCount);
-    //    _enemyTotal.text = enemyCount.ToString();
-    //}
 
     public void UpdateScoreAndEnemyCount()
     {
@@ -119,6 +104,7 @@ public class UIManager : MonoBehaviour
     public void GameOverSequence()
     {
         Time.timeScale = 0.0f;
+        _finalScore.text = "Score: " + _points.ToString();
         _gameOverUI.SetActive(true);
     }
 

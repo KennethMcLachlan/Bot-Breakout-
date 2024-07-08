@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class FinishingWall : MonoBehaviour
 {
-    //[SerializeField] private GameObject _wall;
     [SerializeField] private int _wallHealth;
 
     [SerializeField] private ParticleSystem _explosionAnim;
@@ -26,7 +25,6 @@ public class FinishingWall : MonoBehaviour
         {
             Time.timeScale = 0.0f;
             UIManager.Instance.GameOverSequence();
-            //Initiate Game Over Sequence
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -53,11 +51,4 @@ public class FinishingWall : MonoBehaviour
             UIManager.Instance.UpdateWallHealth(_wallHealth);
         }
     }
-
-    //public void WallHeath(int points)
-    //{
-    //    _wallHealth -= points;
-
-    //    UIManager.Instance.UpdateWallHealth(_wallHealth);
-    //}
 }

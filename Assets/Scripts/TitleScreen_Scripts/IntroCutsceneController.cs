@@ -24,7 +24,6 @@ public class IntroCutsceneController : MonoBehaviour
     {
         if (_anyKeyIsDisabled == false && Input.anyKey)
         {
-            //_skipTextIsActive = true;
             _textToSkip.SetActive(true);
             StartCoroutine(HoldToSetBoolRoutine());
             _anyKeyIsDisabled = true;

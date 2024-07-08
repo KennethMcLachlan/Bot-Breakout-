@@ -21,12 +21,6 @@ public class NukePowerup : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void TakeHit()
     {
         _nukeBehavior.RecievePowerupNotification();

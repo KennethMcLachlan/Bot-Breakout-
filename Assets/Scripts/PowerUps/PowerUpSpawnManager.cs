@@ -95,7 +95,7 @@ public class PowerUpSpawnManager : MonoBehaviour
 
     private IEnumerator SpawnPowerupRoutine()
     {
-        //randomize which powerup ID will be called on
+        //Randomize which Powerup ID will be called on
 
         while (_waveIsActive == true)
         {
@@ -114,7 +114,7 @@ public class PowerUpSpawnManager : MonoBehaviour
         powerup.transform.position = _powerupSpawnPoints[randomSpawnPoint].position;
     }
 
-    //Unlaimed Powerup will be set to "inactive" after duration
+    //Unclaimed Powerup will be set to "inactive" after duration
     private IEnumerator DeactivatePowerupRoutine(GameObject powerup)
     {
         yield return new WaitForSeconds(10f);

@@ -18,9 +18,6 @@ public class RapidFirePowerup : MonoBehaviour
     public void TakeHit()
     {
         _newShootBehavior.RecieveRapidFire();
-        //add sfx
-        //add pfx
-        //add wait for seconds before setting the object to false
         gameObject.SetActive(false);
     }
 }

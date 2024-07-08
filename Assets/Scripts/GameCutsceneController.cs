@@ -22,6 +22,7 @@ public class GameCutsceneController : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1.0f;
         _director.GetComponent<PlayableDirector>();
         StartCoroutine(TextSkipPrevention());
     }

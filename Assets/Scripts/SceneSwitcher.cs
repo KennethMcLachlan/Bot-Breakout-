@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : MonoBehaviour
 {
-    
     public void QuitApplication()
     {
         Application.Quit();
@@ -16,6 +15,4 @@ public class SceneSwitcher : MonoBehaviour
         Time.timeScale = 1.0f;
         SceneManager.LoadScene("MainGame");
     }
-
-
 }

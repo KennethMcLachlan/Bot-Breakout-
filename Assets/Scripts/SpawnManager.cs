@@ -56,7 +56,6 @@ public class SpawnManager : MonoBehaviour
 
             float randomSpawnTime = Random.Range(0.5f, 2.5f);
             yield return new WaitForSeconds(randomSpawnTime);
-
         }
 
         while (_enemiesAreActive == true)
@@ -64,7 +63,6 @@ public class SpawnManager : MonoBehaviour
             EnemyPoolActivity();
             yield return null;
         }
-        
     }
 
     public void StartEnemySpawn()

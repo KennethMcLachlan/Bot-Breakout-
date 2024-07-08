@@ -21,7 +21,7 @@ public class EnemyAI : MonoBehaviour
 
     private Animator _animator;
 
-    //Collider
+    //Enemy Collider
     [SerializeField] private CapsuleCollider _enemyCollider;
 
     //Enemy Death Explosion
@@ -29,10 +29,6 @@ public class EnemyAI : MonoBehaviour
     private ParticleSystem _botExplosion;
     private SkinnedMeshRenderer _botMeshRenderer;
     private AudioSource _botDeathSFX;
-
-    //////Enemy Death Tracking
-    ////private int _totalPoints;
-    ////private int _totalEnemiesDestroyed;
 
     //Enemy Hiding Timer
     private float _hideTimer = 0f;
@@ -150,7 +146,6 @@ public class EnemyAI : MonoBehaviour
         if (other.CompareTag("Waypoint"))
         {
             Debug.Log("Waypoint Trigger has been hit!");
-            //_currentPoint = (_currentPoint + 1) % _wayPoints.Count;
             _currentPoint++;
             if (_currentPoint >= _wayPoints.Count)
             {
@@ -179,8 +174,6 @@ public class EnemyAI : MonoBehaviour
         _animator.SetTrigger("Death");
         StartCoroutine(BotDeathSequence());
         UIManager.Instance.UpdateScoreAndEnemyCount();
-        //SendPoints(100);
-        //SendEnemyCount(1);
     }
 
     private IEnumerator BotDeathSequence()
@@ -216,16 +209,4 @@ public class EnemyAI : MonoBehaviour
 
         _currentState = AIState.Walking;
     }
-
-    //public void SendPoints(int points)
-    //{
-    //    _totalPoints += points;
-    //    UIManager.Instance.UpdateScore(_totalPoints);
-    //}
-
-    //public void SendEnemyCount(int count)
-    //{
-    //    _totalEnemiesDestroyed += count;
-    //    UIManager.Instance.UpdateEnemyCount(_totalEnemiesDestroyed);
-    //}
 }

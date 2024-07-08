@@ -18,9 +18,6 @@ public class GrenadePowerup : MonoBehaviour
     public void TakeHit()
     {
         _newShootBehavior.RecieveGrenadeLauncher();
-        //add sfx
-        //add pfx
-        //add wait for seconds before setting the object to false
         gameObject.SetActive(false);
     }
 }

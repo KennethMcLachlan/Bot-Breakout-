@@ -24,13 +24,10 @@ public class ShieldBehavior : MonoBehaviour
     private void Start()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
-        
         _collider = GetComponent<SphereCollider>();
     }
     private void Update()
     {
-        
-
         if (_health > 5)
         {
             _meshRenderer.material.color = Color.cyan;
@@ -75,5 +72,4 @@ public class ShieldBehavior : MonoBehaviour
     {
         _health--;
     }
-
 }
