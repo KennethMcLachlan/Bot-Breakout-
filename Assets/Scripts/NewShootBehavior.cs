@@ -7,6 +7,10 @@ public class NewShootBehavior : MonoBehaviour
 {
     //Cinemachine Main Camera
     [SerializeField] private CinemachineVirtualCamera _virtualCamera;
+    [SerializeField] private CinemachineVirtualCamera _scopeCamera;
+
+    //Scope/Sights UI
+    [SerializeField] private GameObject _scopeUI;
 
     //Spark On Hit
     [SerializeField] private List<GameObject> _sparkHitPool;
@@ -83,6 +87,18 @@ public class NewShootBehavior : MonoBehaviour
                 FireWeapon();
             }
         }
+
+        // Allow the Player to look down the sights
+        if (Input.GetMouseButton(1))
+        {
+            _scopeCamera.Priority = 15;
+            _scopeUI.SetActive(true);
+        }
+        else
+        {
+            _scopeCamera.Priority = 10;
+            _scopeUI.SetActive(false);
+        }
     }
 
     private void FireWeapon()
@@ -93,6 +109,7 @@ public class NewShootBehavior : MonoBehaviour
         Debug.Log("MuzzleFlash just Played");
 
         _ray = Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f));
+        //if input switches camera/ switches to the scope, _ray = new camera ViewportPointToRay
 
         if (Physics.Raycast(_ray, out _hitInfo, Mathf.Infinity, _hitLayer))
         {
